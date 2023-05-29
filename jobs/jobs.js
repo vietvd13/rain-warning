@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const { getWeather } = require('../services/services');
-const { sendMailRainWarning, sendMailSummerWarning } = require('../sendNoti/sendMail');
-const { sendSMS } = require('../sendNoti/sendSMS');
+const { mailLogError, sendMailRainWarning, sendMailSummerWarning, sendMailGoodNight, sendMailQuote } = require('../sendNoti/sendMail');
+// const { sendSMS } = require('../sendNoti/sendSMS');
 
 const configTimezone = {
     scheduled: true,
@@ -9,26 +9,44 @@ const configTimezone = {
 }
 
 const jobs = () => {
-    cron.schedule('0 8 * * *', async() => {
-        const data = await getWeather();
+    cron.schedule('30 8 * * *', () => {
+        try {
+            sendMailQuote();
+        } catch (error) {
+            console.log(error);
 
-        if (data) {
-            const { weather, main } = data;
+            mailLogError("JOB_QUOTE", error);
+        }
+    });
 
-            if (Array.isArray(weather) && weather.length > 0) {
-                if (weather[0].main === "Rain") {
-                    await sendMailRainWarning(data);
-                } else if (main.temp > 40) {
-                    await sendMailSummerWarning();
+    cron.schedule('45 8 * * *', async() => {
+        try {
+            const data = await getWeather();
+
+            if (data) {
+                const { weather, main } = data;
+    
+                if (Array.isArray(weather) && weather.length > 0) {
+                    if (weather[0].main === "Rain") {
+                        sendMailRainWarning(data);
+                    } else if (main.temp > 40) {
+                        sendMailSummerWarning();
+                    }
+                } else {
+                    mailLogError("API_WEATHER", data);
                 }
-            } else {
-                console.log("Log error");
             }
+        } catch (error) {
+            mailLogError("JOB_WEATHER", error);
         }
     }, configTimezone);
 
-    cron.schedule('0 23 * * *', async() => {
-        await sendMailGoodNight();
+    cron.schedule('0 0 * * *', () => {
+        try {
+            sendMailGoodNight();
+        } catch (error) {
+            mailLogError("JOB_GOOD_NIGHT", error);
+        }
     });
 };
 
