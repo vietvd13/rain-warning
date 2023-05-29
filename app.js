@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
     res.send('App is running');
 });
 
-const { jobs } = require('./jobs');
+const { jobs } = require('./jobs/jobs');
 jobs();
 
 const PORT = process.env.PORT || 3000;
