@@ -4,6 +4,34 @@ const { templateMailSummerWarning } = require('../mail/templateMailSummerWarning
 const { templateMailGoodNight } = require('../mail/templateMailGoodNight');
 const { templateMailQuote } = require('../mail/templateMailQuote');
 
+async function mailLogSMS(message) {
+    console.log("[LOG] - SEND MAIL LOG SMS...");
+
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: false,
+        auth: {
+            user: process.env.SMTP_EMAIL,
+            pass: process.env.SMTP_PASSWORD
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    transporter.verify().then(console.log).catch(console.error);
+
+    const mailOptions = {
+        from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
+        to: "vuducviet0131@gmail.com",
+        subject: `[Duck in Love] - LOG SEND SMS`,
+        html: `<span>Log send mail: ${JSON.stringify(message)}</span>`
+    };
+
+    await transporter.sendMail(mailOptions);
+}
+
 async function mailLogError(type, error) {
     console.log("[LOG] - SEND MAIL LOG ERROR...");
 
@@ -141,6 +169,7 @@ async function sendMailQuote() {
 }
 
 module.exports = {
+    mailLogSMS,
     mailLogError,
     sendMailRainWarning,
     sendMailSummerWarning,

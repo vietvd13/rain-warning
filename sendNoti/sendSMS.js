@@ -1,12 +1,16 @@
+const { mailLogSMS } = require('../sendNoti/sendMail');
+
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const client = require("twilio")(accountSid, authToken);
 
-function sendSMS(data = "Hello") {
+function sendSMS(message = "Hello") {
     client.messages
-        .create({ body: JSON.stringify(data), from: "+13156311185", to: "+84984264170" })
-        .then(message => console.log(message.sid));
+        .create({ body: message, from: "+13156311185", to: "+84379326482" })
+        .then(message => {
+            mailLogSMS(message);
+        });
 }
 
 module.exports = {
