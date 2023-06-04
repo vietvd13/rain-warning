@@ -4,23 +4,23 @@ const { templateMailSummerWarning } = require('../mail/templateMailSummerWarning
 const { templateMailGoodNight } = require('../mail/templateMailGoodNight');
 const { templateMailQuote } = require('../mail/templateMailQuote');
 
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: false,
+    auth: {
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+});
+
+transporter.verify().then(console.log).catch(console.error);
+
 async function mailLogSMS(message) {
     console.log("[LOG] - SEND MAIL LOG SMS...");
-
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-            user: process.env.SMTP_EMAIL,
-            pass: process.env.SMTP_PASSWORD
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    });
-
-    transporter.verify().then(console.log).catch(console.error);
 
     const mailOptions = {
         from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
@@ -35,21 +35,6 @@ async function mailLogSMS(message) {
 async function mailLogError(type, error) {
     console.log("[LOG] - SEND MAIL LOG ERROR...");
 
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-            user: process.env.SMTP_EMAIL,
-            pass: process.env.SMTP_PASSWORD
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    });
-
-    transporter.verify().then(console.log).catch(console.error);
-
     const mailOptions = {
         from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
         to: "vuducviet0131@gmail.com",
@@ -63,25 +48,10 @@ async function mailLogError(type, error) {
 async function sendMailRainWarning() {
     console.log("[LOG] - SEND MAIL WARNING RAIN...");
 
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-            user: process.env.SMTP_EMAIL,
-            pass: process.env.SMTP_PASSWORD
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    });
-
-    transporter.verify().then(console.log).catch(console.error);
-
     const mailOptions = {
         from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
         to: process.env.TO_EMAIL,
-        subject: "Dự báo thời tiết by Vũ Duck",
+        subject: "Cảnh báo mưa tới em bé",
         html: templateMailRainWarning()
     };
 
@@ -91,25 +61,10 @@ async function sendMailRainWarning() {
 async function sendMailSummerWarning() {
     console.log("[LOG] - SEND MAIL SUMMER WARNING...");
 
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-            user: process.env.SMTP_EMAIL,
-            pass: process.env.SMTP_PASSWORD
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    });
-
-    transporter.verify().then(console.log).catch(console.error);
-
     const mailOptions = {
         from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
         to: process.env.TO_EMAIL,
-        subject: "Dự báo thời tiết by Vũ Duck",
+        subject: "Cảnh báo nắng nóng tới em bé",
         html: templateMailSummerWarning()
     };
 
@@ -119,25 +74,10 @@ async function sendMailSummerWarning() {
 async function sendMailGoodNight() {
     console.log("[LOG] - SEND MAIL GOOD NIGHT...");
 
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-            user: process.env.SMTP_EMAIL,
-            pass: process.env.SMTP_PASSWORD
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    });
-
-    transporter.verify().then(console.log).catch(console.error);
-
     const mailOptions = {
         from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
         to: process.env.TO_EMAIL,
-        subject: "Chúc ngủ ngon by Vũ Duck",
+        subject: "Chúc em bé ngủ ngon",
         html: templateMailGoodNight()
     };
 
@@ -145,18 +85,7 @@ async function sendMailGoodNight() {
 }
 
 async function sendMailQuote() {
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-            user: process.env.SMTP_EMAIL,
-            pass: process.env.SMTP_PASSWORD
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    });
+    console.log("[LOG] - SEND MAIL QUOTE...");
 
     const mailOptions = {
         from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,

@@ -22,27 +22,69 @@ const templateMailRainWarning = () => {
                         width: 50%;
                     }
 
+                    ul li {
+                        list-style-type: none;
+                    }
+
+
+                    .mail-rain {
+                        background-color: #FDCEDF;
+                        
+                        padding: 40px;
+                    }
+
+                    .mail-rain__content {
+                        padding: 20px;
+                        margin: 40px;
+
+                        background-color: #FFF;
+                        border: 5px solid #F8E8EE;
+                        
+                        border-radius: 10px;
+                    }
+
+                    .mail-rain-content__header {
+                        margin-bottom: 20px;
+
+                        color: #333;
+
+                        border-bottom: 2px solid #f5f5f5;
+                    }
+
                     @media screen and (max-width: 800px) {
-                        .image-rain {
+                        .image-goodmorning {
                             width: 100%;
                         }
+
+                        .mail-rain {
+                            padding: 10px;
+                        }
+
+                        .mail-rain__content {
+                            padding: 10px;
+                            margin: 10px;
+                        }
                     }
+
                 </style>
             </head>
             <body>
-                <div class="text-center">
-                    <div>🌧️ 🌧️ 🌧️</div>
-                    <h2>Hôm nay Hà Nội có thể mưa em nhớ mang ô hoặc áo mưa nhé 😘</h2>
-                </div>
+                <div class="mail-rain">
+                    <div class="mail-rain__content">
+                        <div class="mail-rain-content__header">
+                            <h1 class="text-center">Cảnh báo trời mưa</h1>
+                        </div>
 
-                <div class="text-center">
-                    <h3><i>Em đi làm cẩn thận nha!</i></h3>
-                </div>
+                        <div class="mail-rain-content__body text-center">
+                            <h3>Dear Em bé của anh ơi,</h3>
+                            <p>Hôm nay Hà Nội có thể mưa em nhớ mang ô hoặc áo mưa nhé!</p>
+                            <p>Di chuyển cẩn thận nha! Yêu em ❤️</p>
 
-                <br />
-
-                <div class="text-center">
-                    <img src="${image}" alt="rain" class="image-rain" />
+                            <div class="text-center">
+                                <img src="${image}" alt="rain" class="image-rain" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </body>
         </html>

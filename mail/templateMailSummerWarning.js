@@ -26,34 +26,73 @@ const templateMailSummerWarning = () => {
                         list-style-type: none;
                     }
 
+
+                    .mail-summer {
+                        background-color: #FDCEDF;
+                        
+                        padding: 40px;
+                    }
+
+                    .mail-summer__content {
+                        padding: 20px;
+                        margin: 40px;
+
+                        background-color: #FFF;
+                        border: 5px solid #F8E8EE;
+                        
+                        border-radius: 10px;
+                    }
+
+                    .mail-summer-content__header {
+                        margin-bottom: 20px;
+
+                        color: #333;
+
+                        border-bottom: 2px solid #f5f5f5;
+                    }
+
                     @media screen and (max-width: 800px) {
-                        .image-summer {
+                        .image-goodmorning {
                             width: 100%;
                         }
+
+                        .mail-summer {
+                            padding: 10px;
+                        }
+
+                        .mail-summer__content {
+                            padding: 10px;
+                            margin: 10px;
+                        }
                     }
+
                 </style>
             </head>
             <body>
-                <div class="text-center">
-                    <div>🌡️☀️🌡️</div>
-                    <h2>Hôm nay Hà Nội nắng nóng lắm baby nha 😘</h2>
-                </div>
+                <div class="mail-summer">
+                    <div class="mail-summer__content">
+                        <div class="mail-summer-content__header">
+                            <h1 class="text-center">Cảnh báo nắng nóng gay gắt</h1>
+                        </div>
 
-                <div class="text-center">
-                    <h3>
-                        <b style="color: red;">Lưu ý:</b>
-                        <ul>
-                            <li>Nhớ bôi kem chống nắng trước khi ra đường</li>
-                            <li>Nhớ mang áo chống nắng khi ra đường</li>
-                            <li>Nhớ uống đủ 2 lít nước mỗi ngày</li>
-                        </ul>
-                    </h3>
-                </div>
+                        <div class="mail-summer-content__body text-center">
+                            <h3>Dear Em bé của anh ơi,</h3>
+                            <p>Hôm nay Hà Nội nắng nóng lắm baby nha!</p>
 
-                <br />
+                            <div class="text-center">
+                                <h3>
+                                    <b style="color: red;">Lưu ý:</b>
+                                    <p>Nhớ bôi kem chống nắng trước khi ra đường</p>
+                                    <p>Nhớ mang áo chống nắng khi ra đường</p>
+                                    <p>Nhớ uống đủ 2 lít nước mỗi ngày</p>
+                                </h3>
+                            </div>
 
-                <div class="text-center">
-                    <img src="${image}" alt="summer" class="image-summer" />
+                            <div class="text-center">
+                                <img src="${image}" alt="summer" class="image-summer" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </body>
         </html>
