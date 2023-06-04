@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getDateTomorrow } = require('../helper/helper');
+const { getDateTomorrow, getMaDViQly } = require('../helper/helper');
 
 const getWeather = async () => {
     try {
@@ -27,10 +27,11 @@ const getWeather = async () => {
     }
 };
 
-const getElectricCutSchedule = async (maDViQly = "PD0400") => {
+const getElectricCutSchedule = async () => {
     try {
         const URL = "https://evnhanoi.vn/api/TraCuu/LichCatDien";
         const dateTomorrow = getDateTomorrow();
+        const maDViQly = getMaDViQly();
 
         if (maDViQly && dateTomorrow) {
             const BODY = {

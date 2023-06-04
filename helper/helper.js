@@ -22,6 +22,20 @@ function format2Digits(number) {
     return number < 10 ? `0${number}` : number;
 }
 
+function getMaDViQly() {
+    const date = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
+
+    const tomorrow = new Date(date.getTime() + 86400000);
+
+    const day = tomorrow.getDay();
+
+    if ([0, 6].includes(day)) {
+        return "PD1900";
+    }
+
+    return "PD1100";
+}
+
 function generateTableEelectricCutSchedule(data, typeScreen = "sm") {
     if (typeScreen === "sm") {
         return `
@@ -127,5 +141,6 @@ function generateTableEelectricCutSchedule(data, typeScreen = "sm") {
 module.exports = {
     getRandomItem,
     getDateTomorrow,
+    getMaDViQly,
     generateTableEelectricCutSchedule
 };
