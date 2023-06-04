@@ -1,6 +1,6 @@
 const cron = require('node-cron');
-const { getWeather } = require('../services/services');
-const { mailLogError, sendMailRainWarning, sendMailSummerWarning, sendMailGoodNight, sendMailQuote } = require('../sendNoti/sendMail');
+const { getWeather, getElectricCutSchedule } = require('../services/services');
+const { mailLogError, sendMailRainWarning, sendMailSummerWarning, sendMailGoodNight, sendMailQuote, sendMailElectricCutSchedule } = require('../sendNoti/sendMail');
 
 const configTimezone = {
     scheduled: true,
@@ -39,6 +39,26 @@ const jobs = () => {
             mailLogError("JOB_WEATHER", error);
         }
     }, configTimezone);
+
+    cron.schedule('30 19 * * *', async() => {
+        try {
+            console.log("[LOG] - RUN JOB ELECTRIC CUT SCHEDULE...");
+
+            const { data } = await getElectricCutSchedule();
+
+            if (data) {
+                const { lichCatdienToList } = data;
+
+                if (Array.isArray(lichCatdienToList)) {
+                    if (lichCatdienToList.length > 0) {
+                        sendMailElectricCutSchedule(lichCatdienToList);
+                    }
+                }
+            }
+        } catch (error) {
+            mailLogError("JOB_ELECTRIC_CUT_SCHEDULE", error);
+        }
+    });
 
     cron.schedule('30 0 * * *', () => {
         try {

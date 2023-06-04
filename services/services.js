@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { getDateTomorrow } = require('../helper/helper');
 
 const getWeather = async () => {
     try {
@@ -26,6 +27,32 @@ const getWeather = async () => {
     }
 };
 
+const getElectricCutSchedule = async (maDViQly = "PD0400") => {
+    try {
+        const URL = "https://evnhanoi.vn/api/TraCuu/LichCatDien";
+        const dateTomorrow = getDateTomorrow();
+
+        if (maDViQly && dateTomorrow) {
+            const BODY = {
+                ngayBatDau: dateTomorrow,
+                ngayKetThuc: dateTomorrow,
+                maDViQly
+            }
+
+            const { data } = await axios.post(URL, BODY);
+
+            return data;
+        } else {
+            console.log(`Missing environment variables: maDViQly: ${maDViQly}, dateTomorrow: ${dateTomorrow}`);
+        }
+    } catch (error) {
+        console.error(error);
+
+        return null;
+    }
+};
+
 module.exports = {
-    getWeather
+    getWeather,
+    getElectricCutSchedule
 }

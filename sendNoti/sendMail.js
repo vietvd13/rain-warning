@@ -3,6 +3,9 @@ const { templateMailRainWarning } = require('../mail/templateMailRainWarning');
 const { templateMailSummerWarning } = require('../mail/templateMailSummerWarning');
 const { templateMailGoodNight } = require('../mail/templateMailGoodNight');
 const { templateMailQuote } = require('../mail/templateMailQuote');
+const { templateMailElectricCutSchedule } = require('../mail/templateMailElectricCutSchedule');
+
+const { getDateTomorrow } = require('../helper/helper');
 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -90,8 +93,21 @@ async function sendMailQuote() {
     const mailOptions = {
         from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
         to: process.env.TO_EMAIL,
-        subject: "Nhắn gửi yêu thương by Vũ Duck",
+        subject: "Nhắn gửi yêu thương",
         html: templateMailQuote()
+    };
+
+    await transporter.sendMail(mailOptions);
+}
+
+async function sendMailElectricCutSchedule(data) {
+    console.log("[LOG] - SEND MAIL ELECTRIC CUT SCHEDULE...");
+
+    const mailOptions = {
+        from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
+        to: process.env.TO_EMAIL,
+        subject: `Lịch cúp điện | ${getDateTomorrow()}`,
+        html: templateMailElectricCutSchedule(data, getDateTomorrow())
     };
 
     await transporter.sendMail(mailOptions);
@@ -103,5 +119,6 @@ module.exports = {
     sendMailRainWarning,
     sendMailSummerWarning,
     sendMailGoodNight,
-    sendMailQuote
+    sendMailQuote,
+    sendMailElectricCutSchedule
 }

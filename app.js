@@ -17,10 +17,6 @@ app.get('/', function (req, res) {
 const { jobs } = require('./jobs/jobs');
 jobs();
 
-const { mailLogError, sendMailRainWarning, sendMailSummerWarning, sendMailGoodNight, sendMailQuote } = require('./sendNoti/sendMail');
-
-sendMailSummerWarning();
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, function () {
