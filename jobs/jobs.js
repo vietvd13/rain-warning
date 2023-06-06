@@ -18,22 +18,22 @@ const jobs = () => {
         }
     });
 
-    cron.schedule('45 8 * * *', async() => {
+    cron.schedule('50 8 * * *', async() => {
         try {
             const data = await getWeather();
 
             if (data) {
-                const { weather, main } = data;
+                let { weather, main } = data;
     
                 if (Array.isArray(weather) && weather.length > 0) {
-                    if ((weather[0].main).includes("Rain")) {
+                    if ((weather[0].description).includes("rain")) {
                         sendMailRainWarning(data);
-                    } else if (main.feels_like >= 40) {
-                        sendMailSummerWarning();
                     }
-                } else {
-                    mailLogError("API_WEATHER", data);
+                } else if (main.feels_like >= 40) {
+                    sendMailSummerWarning();
                 }
+            } else {
+                mailLogError("API_WEATHER", JSON.stringify(data));
             }
         } catch (error) {
             mailLogError("JOB_WEATHER", error);
