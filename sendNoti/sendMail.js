@@ -4,6 +4,7 @@ const { templateMailSummerWarning } = require('../mail/templateMailSummerWarning
 const { templateMailGoodNight } = require('../mail/templateMailGoodNight');
 const { templateMailQuote } = require('../mail/templateMailQuote');
 const { templateMailElectricCutSchedule } = require('../mail/templateMailElectricCutSchedule');
+const { templateMailNews } = require('../mail/templateMailNews');
 
 const { getDateTomorrow } = require('../helper/helper');
 
@@ -113,6 +114,19 @@ async function sendMailElectricCutSchedule(data) {
     await transporter.sendMail(mailOptions);
 }
 
+async function sendMailNews(data) {
+    console.log("[LOG] - SEND MAIL NEWS...");
+
+    const mailOptions = {
+        from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
+        to: process.env.TO_EMAIL,
+        subject: `Tổng hợp tin tức trong ngày`,
+        html: templateMailNews(data)
+    };
+
+    await transporter.sendMail(mailOptions);
+}
+
 module.exports = {
     mailLogSMS,
     mailLogError,
@@ -120,5 +134,6 @@ module.exports = {
     sendMailSummerWarning,
     sendMailGoodNight,
     sendMailQuote,
-    sendMailElectricCutSchedule
+    sendMailElectricCutSchedule,
+    sendMailNews
 }

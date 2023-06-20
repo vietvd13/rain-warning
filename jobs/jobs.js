@@ -1,6 +1,20 @@
 const cron = require('node-cron');
-const { getWeather, getElectricCutSchedule } = require('../services/services');
-const { mailLogError, sendMailRainWarning, sendMailSummerWarning, sendMailGoodNight, sendMailQuote, sendMailElectricCutSchedule } = require('../sendNoti/sendMail');
+
+const { 
+    getWeather, 
+    getElectricCutSchedule, 
+    getNews 
+} = require('../services/services');
+
+const { 
+    mailLogError, 
+    sendMailRainWarning, 
+    sendMailSummerWarning, 
+    sendMailGoodNight, 
+    sendMailQuote, 
+    sendMailElectricCutSchedule, 
+    sendMailNews 
+} = require('../sendNoti/sendMail');
 
 const configTimezone = {
     scheduled: true,
@@ -18,18 +32,18 @@ const jobs = () => {
         }
     });
 
-    cron.schedule('50 8 * * *', async() => {
+    cron.schedule('45 8 * * *', async() => {
         try {
             const data = await getWeather();
 
             if (data) {
-                let { weather, main } = data;
-    
-                if (Array.isArray(weather) && weather.length > 0) {
-                    if ((weather[0].description).includes("rain")) {
-                        sendMailRainWarning(data);
-                    }
-                } else if (main.feels_like >= 40) {
+                const { weather, main } = data;
+
+                if ((weather[0].description).includes("rain")) {
+                    sendMailRainWarning(data);
+                }
+
+                if (main.feels_like >= 40) {
                     sendMailSummerWarning();
                 }
             } else {
@@ -40,7 +54,29 @@ const jobs = () => {
         }
     }, configTimezone);
 
-    cron.schedule('30 19 * * *', async() => {
+    cron.schedule('0 17 * * *', async() => {
+        try {
+            const data = await getWeather();
+
+            if (data) {
+                const { weather, main } = data;
+
+                if ((weather[0].description).includes("rain")) {
+                    sendMailRainWarning(data);
+                }
+
+                if (main.feels_like >= 40) {
+                    sendMailSummerWarning();
+                }
+            } else {
+                mailLogError("API_WEATHER", JSON.stringify(data));
+            }
+        } catch (error) {
+            mailLogError("JOB_WEATHER", error);
+        }
+    }, configTimezone);
+
+    cron.schedule('0 20 * * *', async() => {
         try {
             console.log("[LOG] - RUN JOB ELECTRIC CUT SCHEDULE...");
 
@@ -67,6 +103,20 @@ const jobs = () => {
             mailLogError("JOB_GOOD_NIGHT", error);
         }
     });
+
+    cron.schedule('0 0 * * *', async() => {
+        try {
+            const data = await getNews();
+
+            if (!data) {
+                throw new Error("Dữ liệu tin tức trống");
+            }
+
+            sendMailNews(data);
+        } catch (error) {
+            mailLogError("JOB_NEWS", error);
+        }
+    })
 };
 
 module.exports = {

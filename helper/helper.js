@@ -138,9 +138,94 @@ function generateTableEelectricCutSchedule(data, typeScreen = "sm") {
     }
 }
 
+function getImageInDataRss(data) {
+    var patt = /<img[^>]*src=["']([^"']*)["']/g;
+
+    while(match = patt.exec(data)) {
+        return match[1];
+    }
+}
+
+function generateListNews(data, typeScreen = "sm") {
+    if (typeScreen === "sm") {
+        return `
+            ${(data.map((item) => {
+                return `
+                    <table class="table-news-sm">
+                        ${
+                            getImageInDataRss(item.content) ? 
+                            `
+                                <tr>
+                                    <td colspan="2" style="padding: 0;">
+                                        <img src="${getImageInDataRss(item.content)}" alt="${getImageInDataRss(item.content)}" />
+                                    </td>
+                                </tr>
+                            ` : ""
+                        }
+
+                        <tr>
+                            <td class="text-desc">
+                                <div style="font-weight: 700; margin-bottom: 20px;">
+                                    ${item.title}
+                                </div>
+
+                                <div>
+                                    ${item.contentSnippet}
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <a href="${item.link}" target="_blank">Xem chi tiết</a>
+                            </td>
+                        </tr>
+                    </table>
+                `;
+            })).join("")}
+        `;
+    }
+
+    if (typeScreen === "lg") {
+        return `
+            ${(data.map((item) => {
+                return `
+                    <table class="table-news-sm">
+                        <tr>
+                            <td style="width: 300px;">
+                                ${
+                                    getImageInDataRss(item.content) ?
+                                    `<img src="${getImageInDataRss(item.content)}" alt="${getImageInDataRss(item.content)}" />` : ""
+                                }
+                            </td>
+
+                            <td class="text-desc">
+                                <div style="font-weight: 700; margin-bottom: 20px;">
+                                    ${item.title}
+                                </div>
+
+                                <div>
+                                    ${item.contentSnippet}
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <a href="${item.link}" target="_blank">Xem chi tiết</a>
+                            </td>
+                        </tr>
+                    </table>
+                `;
+            })).join("")}
+        `;
+    }
+}
+
 module.exports = {
     getRandomItem,
     getDateTomorrow,
     getMaDViQly,
-    generateTableEelectricCutSchedule
+    generateTableEelectricCutSchedule,
+    generateListNews
 };

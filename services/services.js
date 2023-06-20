@@ -13,14 +13,18 @@ const getWeather = async () => {
             const { data } = await axios.get(URL);
 
             if (data.cod === 200) {
+                console.log("[SUCCESS] CALL API GET WEATHER");
                 return data;
             } else {
+                console.log("[ERROR] CALL API GET WEATHER");
                 return null;
             }
         } else {
+            console.log("[ERROR] CALL API GET WEATHER");
             console.log(`Missing environment variables: BASE_URL: ${BASE_URL}, API_KEY: ${API_KEY}, LOCATION: ${LOCATION}`);
         }
     } catch (error) {
+        console.log("[ERROR] CALL API GET WEATHER");
         console.error(error);
 
         return null;
@@ -44,16 +48,68 @@ const getElectricCutSchedule = async () => {
 
             return data;
         } else {
+            console.log("[ERROR] CALL API GET ELECTRIC");
             console.log(`Missing environment variables: maDViQly: ${maDViQly}, dateTomorrow: ${dateTomorrow}`);
         }
     } catch (error) {
+        console.log("[ERROR] CALL API GET ELECTRIC");
         console.error(error);
 
         return null;
     }
 };
 
+const getNews = async () => {
+    try {
+        const Parser = require('rss-parser');
+        const parser = new Parser();
+        
+        const { LIST_CONFIG_VNEXPRESS_RSS } = require("../config");
+    
+        const listWantView = [
+            "thoi-su"
+        ];
+
+        let result = [];
+
+        const len = listWantView.length;
+        let idx = 0;
+
+        while (idx < len) {
+            const config = LIST_CONFIG_VNEXPRESS_RSS.find(item => item.type === listWantView[idx]);
+
+            if (config) {
+                console.log(`[START] CALL API GET NEWS: ${config.name}`);
+
+                const item = await parser.parseURL(config.url);
+
+                if (item && item.items && item.items.length > 0) {
+                    console.log(`[SUCCESS] RESPONSE API GET NEWS: ${config.name} - ${item.items.length} items`);
+
+                    result = item.items;
+
+                    if (result.length > 30) {
+                        result = result.slice(0, 30);
+                    }
+                } else {
+                    console.log(`[ERROR] RESPONSE API GET NEWS: ${config.name}`);
+                }
+            } else {
+                console.log(`[ERROR] CALL API GET NEWS: ${listWantView[idx]}`);
+            }
+
+            idx++;
+        }
+
+        console.log("[END] CALL API GET NEWS");
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getWeather,
-    getElectricCutSchedule
+    getElectricCutSchedule,
+    getNews
 }
