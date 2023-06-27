@@ -30,7 +30,7 @@ const jobs = () => {
 
             mailLogError("JOB_QUOTE", error);
         }
-    });
+    }, configTimezone);
 
     cron.schedule('45 8 * * *', async() => {
         try {
@@ -94,7 +94,7 @@ const jobs = () => {
         } catch (error) {
             mailLogError("JOB_ELECTRIC_CUT_SCHEDULE", error);
         }
-    });
+    }, configTimezone);
 
     cron.schedule('30 0 * * *', () => {
         try {
@@ -102,7 +102,7 @@ const jobs = () => {
         } catch (error) {
             mailLogError("JOB_GOOD_NIGHT", error);
         }
-    });
+    }, configTimezone);
 
     cron.schedule('0 0 * * *', async() => {
         try {
@@ -116,7 +116,7 @@ const jobs = () => {
         } catch (error) {
             mailLogError("JOB_NEWS", error);
         }
-    })
+    }, configTimezone);
 };
 
 module.exports = {
