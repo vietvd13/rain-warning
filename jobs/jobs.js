@@ -3,7 +3,8 @@ const cron = require('node-cron');
 const { 
     getWeather, 
     getElectricCutSchedule, 
-    getNews 
+    getNews,
+    getSavingsInterestRate
 } = require('../services/services');
 
 const { 
@@ -13,7 +14,8 @@ const {
     sendMailGoodNight, 
     sendMailQuote, 
     sendMailElectricCutSchedule, 
-    sendMailNews 
+    sendMailNews,
+    sendMailSavingsInterest
 } = require('../sendNoti/sendMail');
 
 const configTimezone = {
@@ -115,6 +117,21 @@ const jobs = () => {
             sendMailNews(data);
         } catch (error) {
             mailLogError("JOB_NEWS", error);
+        }
+    }, configTimezone);
+
+    cron.schedule('30 9 * * *', async() => {
+        try {
+            const data = await getSavingsInterestRate();
+
+            if (!data) {
+                throw new Error("Dữ liệu lãi suất tiết kiệm trống");
+            }
+
+            console.log(data);
+            sendMailSavingsInterest(data);
+        } catch (error) {
+            mailLogError("JOB_SAVINGS_INTEREST_RATE", error);
         }
     }, configTimezone);
 };

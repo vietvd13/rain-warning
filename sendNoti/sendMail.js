@@ -5,6 +5,7 @@ const { templateMailGoodNight } = require('../mail/templateMailGoodNight');
 const { templateMailQuote } = require('../mail/templateMailQuote');
 const { templateMailElectricCutSchedule } = require('../mail/templateMailElectricCutSchedule');
 const { templateMailNews } = require('../mail/templateMailNews');
+const { templateMailSavingsInterestRate } = require('../mail/templateMailSavingsInterestRate');
 
 const { getDateTomorrow } = require('../helper/helper');
 
@@ -127,6 +128,19 @@ async function sendMailNews(data) {
     await transporter.sendMail(mailOptions);
 }
 
+async function sendMailSavingsInterest(data) {
+    console.log("[LOG] - SEND MAIL SAVINGS INTEREST...");
+
+    const mailOptions = {
+        from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
+        to: process.env.TO_EMAIL,
+        subject: `Gửi lãi tiết kiệm`,
+        html: templateMailSavingsInterestRate(data)
+    };
+
+    await transporter.sendMail(mailOptions);
+}
+
 module.exports = {
     mailLogSMS,
     mailLogError,
@@ -135,5 +149,6 @@ module.exports = {
     sendMailGoodNight,
     sendMailQuote,
     sendMailElectricCutSchedule,
-    sendMailNews
+    sendMailNews,
+    sendMailSavingsInterest
 }

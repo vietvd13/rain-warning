@@ -108,8 +108,72 @@ const getNews = async () => {
     }
 }
 
+const getSavingsInterestRate = async (type = "") => {
+    try {
+        const LIST_TYPE = [
+            {
+                type: "online",
+                link: "https://gw.vnexpress.net/th?types=bank_rate_online"
+            },
+            {
+                type: "offline",
+                link: "https://gw.vnexpress.net/th?types=bank_rate_offline"
+            }
+        ];
+
+        const item = LIST_TYPE.find(item => item.type === type);
+
+        if (item) {
+            const { data } = await axios.get(item.link);
+
+            if (data.code === 200) {
+                return [{
+                    type: item.type,
+                    data: data.data.bank_rate_online
+                }]
+            } else {
+                return null;
+            }
+        } else {
+            const len = LIST_TYPE.length;
+            let idx = 0;
+
+            const result = [];
+
+            while (idx < len) {
+                const { data } = await axios.get(LIST_TYPE[idx].link);
+
+                if (data.code === 200) {
+                    if (LIST_TYPE[idx].type === "online") {
+                        result.push({
+                            type: LIST_TYPE[idx].type,
+                            data: data.data.bank_rate_online
+                        });
+                    }
+
+                    if (LIST_TYPE[idx].type === "offline") {
+                        result.push({
+                            type: LIST_TYPE[idx].type,
+                            data: data.data.bank_rate_offline
+                        });
+                    }
+                }
+
+                idx++;
+            }
+
+            return result;
+        }
+    } catch (error) {
+        console.log(error);
+
+        return null;
+    }
+}
+
 module.exports = {
     getWeather,
     getElectricCutSchedule,
-    getNews
+    getNews,
+    getSavingsInterestRate
 }
